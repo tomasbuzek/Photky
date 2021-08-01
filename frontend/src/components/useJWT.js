@@ -4,14 +4,22 @@ const KEY_TOKEN = 'token';
 
 export default function useJWT() {
     const getTokenLocal = () => {
-        return JSON.parse(localStorage.getItem(KEY_TOKEN))
+        const tokenJSON = localStorage.getItem(KEY_TOKEN);
+
+        if (typeof tokenJSON === 'undefined') {
+            return null;
+        }
+
+        return JSON.parse(tokenJSON);
     }
 
     const [token, setTokenToState] = useState(getTokenLocal());
 
     const storeTokenLocal = userToken => {
-        localStorage.setItem(KEY_TOKEN, JSON.stringify(userToken));
-        setTokenToState(userToken);
+        if (typeof userToken !== 'undefined') {
+            localStorage.setItem(KEY_TOKEN, JSON.stringify(userToken));
+            setTokenToState(userToken);
+        }
     }
 
     const clearTokenLocal = () => {

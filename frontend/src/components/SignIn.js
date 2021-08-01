@@ -11,7 +11,16 @@ async function login(credentials) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(credentials)
-    }).then(data => data.json())
+    }).then(data => data.text())
+    .then(text => {
+        const dataJSON = JSON.parse(text);
+
+        if (dataJSON['refresh'] && dataJSON['access']) {
+            return dataJSON;
+        }
+
+        return null;
+    });
 }
 
 export default function SignIn({setToken}) {
