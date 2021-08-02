@@ -28,7 +28,10 @@ class SignUpView(APIView):
 
 
 class PhotoView(viewsets.ModelViewSet):
+    permission_classes = {permissions.IsAuthenticated, }
     serializer_class = PhotoSerializer
-    queryset = Photo.objects.all()
+
+    def get_queryset(self):
+        return Photo.objects.filter(owner=self.request.user)
 
 # Create your views here.
