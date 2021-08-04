@@ -18,3 +18,6 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ('id', 'image', 'filename', 'added', 'owner')
+        extra_kwargs = {
+            'image': {'write_only': True}
+        }

@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'photky.User'
 
+MEDIA_ROOT = 'upload/'
+
 # Application definition
 
 INSTALLED_APPS = [

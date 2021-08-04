@@ -30,10 +30,24 @@ export default function Photos({token}) {
         });
     }, [accessToken]);
 
+    const upload = (event) => {
+        let formData = new FormData();
+
+        formData.append("image", event.target.files[0]);
+
+        return axios.post("/api/photos/", formData, {
+          headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      };
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <Fab color="primary" variant="extended" className={classes.fab}>
+            <input accept="image/*" className={classes.input} id="contained-button-file" multiple type="file" onChange={upload} />
+            <Fab color="primary" variant="extended" className={classes.fab} htmlFor="contained-button-file" component="label">
                 <AddAPhotoIcon className={classes.extendedIcon} />
                 Upload
             </Fab>

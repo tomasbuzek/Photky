@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
       bottom: theme.spacing(3),
       right: theme.spacing(3),
     },
+    input: {
+      display: 'none',
+    },
   }));
 
   export default useStyles;

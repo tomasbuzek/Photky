@@ -1,4 +1,7 @@
+from django.http import HttpResponse
+
 from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -34,4 +37,31 @@ class PhotoView(viewsets.ModelViewSet):
     def get_queryset(self):
         return Photo.objects.filter(owner=self.request.user)
 
-# Create your views here.
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
+
+    @action(methods=['get'], detail=True)
+    def image(self, request, pk=None):
+        try:
+            photo = Photo.objects.get(id=pk)
+        except:
+            return Response("Photo not found", status=status.HTTP_404_NOT_FOUND)
+
+        if photo.owner == self.request.user:
+            return HttpResponse(photo.image, content_type=photo.content_type)
+        else:
+            return Response("Access to the photo is forbidden.", status=status.HTTP_403_FORBIDDEN)
+
+    @action(methods=['get'], detail=True)
+    def thumbnail(self, request, pk=None):
+        try:
+            photo = Photo.objects.get(id=pk)
+        except:
+            return Response("Photo not found", status=status.HTTP_404_NOT_FOUND)
+
+        if photo.owner == self.request.user:
+            if not photo.thumbnail:
+                photo.create_thumbnail()
+            return HttpResponse(photo.thumbnail, content_type="image/jpeg")
+        else:
+            return Response("Access to the photo is forbidden.", status=status.HTTP_403_FORBIDDEN)
