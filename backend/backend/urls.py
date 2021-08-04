@@ -23,12 +23,16 @@ from rest_framework_simplejwt.views import (
 from photky import views
 
 router = routers.DefaultRouter()
-router.register(r'photos', views.PhotoView, 'photo')
+router.register(r'photos', views.PhotoView, 'photo') # photos API
 
 urlpatterns = [
+    # Admin site
     path('admin/', admin.site.urls),
+    # API root
     path('api/', include(router.urls)),
+    # JWT token
     path('api/token/', TokenObtainPairView.as_view(), name='token_create'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # User registration
     path('api/signup/', views.SignUpView.as_view()),
 ]
